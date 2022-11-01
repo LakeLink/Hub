@@ -1,0 +1,44 @@
+﻿@page
+@{
+    ViewData["Title"] = "Trust This Device";
+    Layout = "_Layout";
+}
+<section
+    class="min-w-screen-sm max-w-screen-lg w-full flex flex-col justify-center text-gray-50 py-6 sm:py-20 px-6 space-y-4">
+    <h1 class="text-xl text-sky-200">@ViewData["Title"]</h1>
+    <hr />
+    <p>
+        If you choose to "trust this device", that means this device will be granted for a trusted period of 14
+        days, during which you don't have to login again for any service.<br />
+        如果你选择“信任此设备”，那么在接下来的14天中，该设备是受信任的，在访问其他服务时都不需要再次登录。
+    </p>
+    <p>
+        Our method of saving your credential is much more safer than make it remember in the browser(which can be viewed
+        directly).<br />
+        我们保存您的凭据的方法比在浏览器中记住密码更加安全可靠。
+    </p>
+    <p>
+        If you lost your device, you only need to change your password from official SSO. All the devices will become
+        untrusted and your password will not be leaked.<br />
+        如果你的设备丢失，你只需要在统一身份认证平台修改你的密码即可。原有的信任将自动失效，且你的原密码不会泄露。
+    </p>
+    <h2 class="text-lg mt-4">
+        <span class="text-sky-200 mr-2">Q:</span>How you managed to remember my credential and keep
+        it
+        from being stolen at the same
+        time?<br />你们是如何做到在保存凭据的同时防止密码泄露？
+    </h2>
+    <p>
+        <span class="text-sky-200 mr-2">A:</span>We encrypt your credential and save it on your local computer. But the
+        key to decrypt is well protected in our
+        server.<br />
+        我们会加密你的凭据并只将其保存在你的电脑上。但是用于加密的密钥将会严密的保存在我们的服务器上。<br />
+        If you are interested in the detail, feel free to contact us at your convenience.<br />
+        如果你对实现这些功能的细节有兴趣，欢迎随时联系我们。
+    </p>
+    <p>
+        For any other concerns, please check our <a asp-page="/Help/Privacy" class="underline text-sky-400">Privacy
+            Policy</a><br />
+        如有其他顾虑，请查看我们的 <a asp-page="/Help/Privacy" class="underline text-sky-400">隐私政策</a>
+    </p>
+</section>

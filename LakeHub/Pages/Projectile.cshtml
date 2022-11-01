@@ -1,0 +1,54 @@
+@page
+@{
+    ViewData["Title"] = "Projectile";
+    Layout = "_Layout";
+}
+
+@section Head
+{
+    <link href="https://releases.transloadit.com/uppy/v3.1.1/uppy.min.css" rel="stylesheet">
+}
+
+<section>
+
+</section>
+
+<div class="mt-12">
+    <h1 class="text-xl text-slate-300">Projectile</h1>
+    <h2 class="text-lg text-slate-200">- File sharing</h2>
+</div>
+
+<div class="h-80 w-10/12 DashboardContainer">
+        <input type="file" class="drag-drop-area">
+</div>
+
+
+
+@section Scripts
+{
+    <script type="module">
+        import { Uppy, Dashboard, Tus } from "https://releases.transloadit.com/uppy/v3.1.1/uppy.min.mjs"
+        var uppy = new Uppy()
+
+        uppy.use(Tus, { endpoint: '/fs/' })
+
+        uppy.on('complete', result => {
+            console.log('successful files:')
+            console.log(result.successful)
+            console.log('failed files:')
+            console.log(result.failed)
+        })
+
+        uppy.use(Dashboard, {
+            target: '.DashboardContainer',
+            inline: true,
+            height: 470,
+            showProgressDetails: true,
+            showLinkToFileUploadResult: true,
+            metaFields: [
+                { id: 'name', name: 'Name', placeholder: 'file name' },
+                { id: 'caption', name: 'Caption', placeholder: 'add description' },
+            ],
+        })
+    </script>
+}
