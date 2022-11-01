@@ -71,7 +71,18 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+}
 
-app.MapGet("/", () => "Hello World!");
+app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSession();
+
+app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
