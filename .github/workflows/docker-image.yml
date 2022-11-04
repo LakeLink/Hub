@@ -7,17 +7,21 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
+    - name: Docker Login
+      uses: docker/login-action@v2.1.0
+      with:
+        registry: "ghcr.io"
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
       uses: docker/build-push-action@v3.2.0
       with:
-        context: ./LakeHub
-        file: Dockerfile
+        file: ./LakeHub/Dockerfile
         tags: ghcr.io/lakelink/hub:latest
         push: true
+        cache-from: type=registry,ref=ghcr.io/lakelink/overleaf-ldap-oauth2:latest
+        cache-to: type=inline
