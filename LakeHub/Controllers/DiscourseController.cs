@@ -6,7 +6,7 @@ using System.Text.Json;
 using LakeHub.Options;
 using LakeHub.Services;
 
-namespace LakeHub.Controllers.Webhooks
+namespace LakeHub.Controllers
 {
     [Route("_Api/1/Webhook/[controller]")]
     [ApiController]
