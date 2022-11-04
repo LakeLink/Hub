@@ -39,6 +39,7 @@ switch (dbProvider)
             options.UseNpgsql(
                 builder.Configuration.GetConnectionString(dbProvider) ?? throw new InvalidOperationException("Connection string 'PostgreSql' not found.")
             )
+            .UseOpenIddict()
         );
         break;
 }
