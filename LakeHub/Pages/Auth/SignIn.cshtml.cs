@@ -70,11 +70,11 @@ public class SignInModel : PageModel
 
             var claims = new List<Claim>
             {
-                new Claim("id", InputCASId!),
-                new Claim("password", InputPassword!),
-                new Claim("name", user.Name!),
+                new Claim(ClaimTypes.NameIdentifier, InputCASId!),
+                new Claim("cas:password", InputPassword!),
+                new Claim(ClaimTypes.Name, user.Name!),
                 // new Claim("pycc", JsonPrincipleAttribs.GetProperty("pycc").GetString()!),
-                new Claim("org", user.Org!)
+                new Claim("cas:organization", user.Org!)
             };
 
             var claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, "id", "role");

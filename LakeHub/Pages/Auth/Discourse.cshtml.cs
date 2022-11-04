@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using LakeHub.Models;
 using LakeHub.Options;
+using System.Security.Claims;
 
 namespace LakeHub.Pages.Auth;
 
@@ -96,7 +97,7 @@ public class DiscourseModel : PageModel
             ModelState.AddModelError(string.Empty, "Invalid e-mail address.");
             return Page();
         } // Now we have a valid email input
-        string casId = User.FindFirst("id")!.Value;
+        string casId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         DbUser user = (await _db.User.FindAsync(casId))!;
         if (InputVerifyCode == null) // No verification code, generate it
         {
@@ -147,7 +148,7 @@ public class DiscourseModel : PageModel
 
     public async Task<IActionResult> OnGet(string? sso, string? sig)
     {
-        string casId = User.FindFirst("id")!.Value;
+        string casId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = (await _db.User.FindAsync(casId))!;
         if (ChangeEmail ?? false) // User wants to change email
         {
