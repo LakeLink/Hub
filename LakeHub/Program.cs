@@ -9,6 +9,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using System.Threading;
 using static OpenIddict.Abstractions.OpenIddictConstants;
+using static OpenIddict.Server.OpenIddictServerEvents;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,7 +86,7 @@ builder.Services.AddOpenIddict()
         // Enable the authorization and token endpoints.
         options.SetAuthorizationEndpointUris("/Auth/Oidc/Authorize")
                .SetTokenEndpointUris("/Auth/Oidc/Token")
-               .SetIntrospectionEndpointUris("/Auth/Oidc/Info");
+               .SetUserinfoEndpointUris("/Auth/Oidc/Userinfo");
 
         // Note: this sample only uses the authorization code flow but you can enable
         // the other flows if you need to support implicit, password or client credentials.
@@ -105,6 +106,8 @@ builder.Services.AddOpenIddict()
         //
         options.UseAspNetCore()
                .EnableAuthorizationEndpointPassthrough();
+        options.AddEventHandler<HandleUserinfoRequestContext>(options =>
+            options.UseSingletonHandler<OidcUserinfoHandler>());
     })
 
     // Register the OpenIddict validation components.
@@ -168,12 +171,10 @@ await using (var scope = app.Services.CreateAsyncScope())
         {
             Permissions.Endpoints.Authorization,
             Permissions.Endpoints.Token,
+            Permissions.Endpoints.Introspection,
 
             Permissions.GrantTypes.AuthorizationCode,
-            Permissions.GrantTypes.Implicit,
-            Permissions.ResponseTypes.Code,
-            Permissions.ResponseTypes.Token,
-            Permissions.ResponseTypes.IdToken
+            Permissions.ResponseTypes.Code
         }
     };
     if (await manager.FindByClientIdAsync("debugid") is null)

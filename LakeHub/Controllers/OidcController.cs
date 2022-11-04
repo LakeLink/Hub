@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using LakeHub.Models;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using System.Security.Claims;
 using static OpenIddict.Abstractions.OpenIddictConstants;
-using LakeHub.Models;
 
 namespace LakeHub.Controllers
 {
@@ -29,20 +27,35 @@ namespace LakeHub.Controllers
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Authorize()
         {
+            var request = HttpContext.GetOpenIddictServerRequest()!;
+
             string casId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             DbUser user = (await _db.User.FindAsync(casId))!;
             var identity = new ClaimsIdentity("OpenIddict");
             identity.AddClaim(Claims.Subject, User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Destinations.AccessToken, Destinations.IdentityToken);
             identity.AddClaim(Claims.Name, User.FindFirstValue(ClaimTypes.Name),
-                Destinations.IdentityToken);
-            identity.AddClaim("cas:organization", User.FindFirstValue("cas:organization"));
+                Destinations.AccessToken);
+            identity.AddClaim("cas:organization", User.FindFirstValue("cas:organization"),
+                Destinations.AccessToken);
 
             identity.AddClaim(Claims.Email, user.Email!,
-                Destinations.IdentityToken);
+                Destinations.AccessToken);
             identity.AddClaim(Claims.EmailVerified, user.EmailVerified.ToString(),
-                Destinations.IdentityToken);
+                Destinations.AccessToken);
             var principal = new ClaimsPrincipal(identity);
+
+            // OAuth2 doesn't have scopes.
+            // Oidc request: should always have openid scope
+            if (request.GetScopes().Length == 0)
+            {
+                principal.SetScopes(new[]
+                {
+                    Scopes.Profile,
+                    Scopes.Email
+                });
+            }
+            else principal.SetScopes(request.GetScopes());
 
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
