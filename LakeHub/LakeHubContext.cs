@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using LakeHub.Models;
+﻿using LakeHub.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LakeHub
 {

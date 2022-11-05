@@ -1,6 +1,6 @@
+using LakeHub.Options;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
-using LakeHub.Options;
 
 namespace LakeHub.Pages;
 

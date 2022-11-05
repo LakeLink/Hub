@@ -1,7 +1,4 @@
-﻿@page
-@using LakeHub.Pages.Auth;
-@using Microsoft.AspNetCore.Mvc.ModelBinding
-@model SignInModel
+﻿@model Models.CasSignInForm
 @{
     ViewData["Title"] = "Sign In";
     Layout = "_Layout";
@@ -18,33 +15,20 @@
     <form class="mt-2 space-y-6" method="POST" autocomplete="on">
         <div class="shadow-lg">
             <div>
-                @if (ModelState["InputCASId"]?.ValidationState == ModelValidationState.Invalid)
-                {
-
-                    <input asp-for="InputCASId" required
-                       class="block w-full rounded-t-md border border-red-400 px-3 py-2 text-red-600 placeholder-red-500"
-                       placeholder="Wrong ID" />
-                }
-                else
-                {
-                    <input asp-for="InputCASId" required
-                       class="block w-full rounded-t-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
-                       placeholder="ID" />
-                }
+@*                <input asp-for="InputCASId" required
+                    class="block w-full rounded-t-md border border-red-400 px-3 py-2 text-red-600 placeholder-red-500"
+                    placeholder="Wrong ID" />*@
+                <input asp-for="InputCASId" required
+                    class="block w-full rounded-t-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
+                    placeholder="ID" />
             </div>
             <div>
-                @if (ModelState["InputPassword"]?.ValidationState == ModelValidationState.Invalid)
-                {
-                    <input asp-for="InputPassword" required
-                       class="block w-full rounded-b-md border border-red-400 px-3 py-2 text-gray-600 placeholder-red-500"
-                       placeholder="Wrong password" />
-                }
-                else
-                {
-                    <input asp-for="InputPassword" required
-                       class="block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
-                       placeholder="Password" />
-                }
+@*                <input asp-for="InputPassword" required
+                    class="block w-full rounded-b-md border border-red-400 px-3 py-2 text-gray-600 placeholder-red-500"
+                    placeholder="Wrong password" />*@
+                <input asp-for="InputPassword" required
+                    class="block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
+                    placeholder="Password" />
             </div>
         </div>
 

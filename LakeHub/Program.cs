@@ -1,13 +1,11 @@
+using LakeHub;
 using LakeHub.Options;
 using LakeHub.Services;
-using LakeHub;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
-using Refit;
 using OpenIddict.Abstractions;
-using OpenIddict.Core;
-using System.Threading;
+using Refit;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using static OpenIddict.Server.OpenIddictServerEvents;
 
@@ -16,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Inject configurations
 builder.Services.Configure<IndexOptions>(
     builder.Configuration.GetSection(IndexOptions.Key));
-
 builder.Services.Configure<DiscourseOptions>(
     builder.Configuration.GetSection(DiscourseOptions.Key));
-
+builder.Services.Configure<MailOptions>(
+    builder.Configuration.GetSection(MailOptions.Key));
 
 // Configure database
 var dbProvider = builder.Configuration.GetValue<string>("DbProvider");
@@ -126,8 +124,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.Name = "Auth";
-        options.LoginPath = new PathString("/Auth/SignIn");
-        options.LogoutPath = new PathString("/Auth/SignOut");
+        options.LoginPath = new PathString("/Auth/Cas/SignIn");
+        options.LogoutPath = new PathString("/Auth/Cas/SignOut");
     });
 builder.Services.AddAuthorization();
 
@@ -155,8 +153,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
 app.MapRazorPages();
-app.MapControllers();
+//app.MapControllers();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {

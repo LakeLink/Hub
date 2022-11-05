@@ -1,7 +1,5 @@
 ﻿using OpenIddict.Abstractions;
 using OpenIddict.Server;
-using System.Globalization;
-using System.Text.Json;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using static OpenIddict.Server.OpenIddictServerEvents;
 
