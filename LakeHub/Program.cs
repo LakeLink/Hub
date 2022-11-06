@@ -129,6 +129,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = new PathString("/Auth/Cas/SignIn");
         options.LogoutPath = new PathString("/Auth/Cas/SignOut");
     });
+//https://learn.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-6.0
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("EmailRequired", policy =>
@@ -137,7 +138,8 @@ builder.Services.AddAuthorization(options =>
         policy.Requirements.Add(new EmailRequirement { Verified = true });
     });
 });
-builder.Services.AddSingleton<IAuthorizationHandler, EmailRequirement>
+//https://learn.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-6.0#handler-registration
+builder.Services.AddSingleton<IAuthorizationHandler, EmailRequirementHandler>();
 
 builder.Services.AddDistributedMemoryCache();
 
