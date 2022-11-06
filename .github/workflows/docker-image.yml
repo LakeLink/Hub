@@ -35,5 +35,5 @@ jobs:
         file: ./LakeHub/Dockerfile
         tags: ghcr.io/lakelink/hub:latest
         push: true
-        cache-from: type=registry,ref=ghcr.io/lakelink/overleaf-ldap-oauth2:latest
+        cache-from: type=registry,ref=ghcr.io/lakelink/hub:latest
         cache-to: type=inline
