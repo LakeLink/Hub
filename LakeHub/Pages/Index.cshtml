@@ -40,7 +40,7 @@
             <div class="flex flex-col items-center hover:scale-105 transition">
                 @if (link.NeedCAS)
                 {
-                    <a asp-controller="Cas" asp-action="Connect" asp-route-serviceUrl="@link.Url"
+                    <a asp-area="Auth" asp-controller="Cas" asp-action="Connect" asp-route-serviceUrl="@link.Url"
                class="mb-1 rounded-xl shadow-xl  bg-slate-900  hover:bg-slate-800 text-center h-12 w-12  sm:h-16 sm:w-16  md:h-20 md:w-20  flex place-items-center justify-center">
                         <img class="p-4" src="@link.ImgPath" />
                     </a>
