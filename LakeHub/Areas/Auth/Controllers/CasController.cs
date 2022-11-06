@@ -263,6 +263,7 @@ namespace LakeHub.Areas.Auth.Controllers
             return Path.GetFileName(url?.AbsolutePath);
         }
 
+        [Authorize]
         public async Task<IActionResult> Connect(string serviceUrl)
         {
             await HttpContext.Session.LoadAsync();
