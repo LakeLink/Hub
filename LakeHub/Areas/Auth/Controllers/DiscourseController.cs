@@ -10,6 +10,7 @@ using System.Text;
 
 namespace LakeHub.Areas.Auth.Controllers
 {
+    [Area("Auth")]
     public class DiscourseController : Controller
     {
         private readonly ILogger<DiscourseController> _logger;
