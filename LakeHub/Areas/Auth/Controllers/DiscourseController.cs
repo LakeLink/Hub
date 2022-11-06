@@ -70,6 +70,7 @@ namespace LakeHub.Areas.Auth.Controllers
                 { "external_id", user.CasId },
                 { "name", user.Name },
                 { "email", user.Email! },
+                // user_field_{id}, id can be found in the url of each custom field or through api response
                 { "custom.user_field_1", user.Org }
             });
             _logger.LogInformation("User {CASId} logged in Discourse from {Address}", user.CasId, HttpContext.Connection.RemoteIpAddress);
