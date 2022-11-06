@@ -1,7 +1,9 @@
 using LakeHub;
 using LakeHub.Options;
+using LakeHub.Policies;
 using LakeHub.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
@@ -127,7 +129,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = new PathString("/Auth/Cas/SignIn");
         options.LogoutPath = new PathString("/Auth/Cas/SignOut");
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("EmailRequired", policy =>
+    {
+        policy.AuthenticationSchemes.Add(CookieAuthenticationDefaults.AuthenticationScheme);
+        policy.Requirements.Add(new EmailRequirement { Verified = true });
+    });
+});
+builder.Services.AddSingleton<IAuthorizationHandler, EmailRequirement>
 
 builder.Services.AddDistributedMemoryCache();
 

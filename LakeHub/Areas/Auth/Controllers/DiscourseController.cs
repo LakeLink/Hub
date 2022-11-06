@@ -51,8 +51,8 @@ namespace LakeHub.Areas.Auth.Controllers
             });
         }
 
-        [Authorize]
-        public async Task<IActionResult> OnGet(string? sso, string? sig)
+        [Authorize("EmailRequired")]
+        public async Task<IActionResult> Connect(string? sso, string? sig)
         {
             string casId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = (await _db.User.FindAsync(casId))!;
