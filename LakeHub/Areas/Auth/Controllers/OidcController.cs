@@ -8,11 +8,10 @@ using OpenIddict.Server.AspNetCore;
 using System.Security.Claims;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace LakeHub.Controllers
+namespace LakeHub.Areas.Auth.Controllers
 {
-    [Route("/Auth/Oidc")]
-    [ApiController]
-    public class OidcController : ControllerBase
+    [Area("Auth")]
+    public class OidcController : Controller
     {
         private readonly LakeHubContext _db;
         private readonly ILogger<OidcController> _logger;
@@ -22,8 +21,8 @@ namespace LakeHub.Controllers
             _db = db;
         }
 
-        [HttpGet("Authorize")]
-        [HttpPost("Authorize")]
+        [HttpGet]
+        [HttpPost]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Authorize()
         {
