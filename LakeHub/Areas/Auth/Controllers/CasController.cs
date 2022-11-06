@@ -46,7 +46,7 @@ namespace LakeHub.Areas.Auth.Controllers
 
         //https://learn.microsoft.com/zh-cn/aspnet/core/security/authentication/cookie
         [HttpPost]
-        public async Task<IActionResult> SignIn(string? ReturnUrl, CasSignInForm cred)
+        public async Task<IActionResult> SignInAsync(string? ReturnUrl, CasSignInForm cred)
         {
             if (!ModelState.IsValid) return View();
             try
@@ -149,14 +149,14 @@ namespace LakeHub.Areas.Auth.Controllers
         }
 
         [HttpGet]
-        [Authorize(CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult Email()
         {
             return View(new CasEmailForm());
         }
 
         [HttpPost]
-        [Authorize(CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> EmailAsync(string? ReturnUrl, CasEmailForm e)
         {
             if (ModelState["InputEmail"]!.ValidationState == ModelValidationState.Invalid /* || !Email.ToLower().EndsWith("@westlake.edu.cn")*/)
