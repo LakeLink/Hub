@@ -128,6 +128,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "Auth";
         options.LoginPath = new PathString("/Auth/Cas/SignIn");
         options.LogoutPath = new PathString("/Auth/Cas/SignOut");
+        options.AccessDeniedPath = new PathString("/Auth/Cas/AccessDenied");
     });
 //https://learn.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-6.0
 builder.Services.AddAuthorization(options =>
@@ -139,7 +140,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 //https://learn.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-6.0#handler-registration
-builder.Services.AddSingleton<IAuthorizationHandler, EmailRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, EmailRequirementHandler>();
 
 builder.Services.AddDistributedMemoryCache();
 
