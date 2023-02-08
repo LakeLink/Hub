@@ -31,9 +31,18 @@ jobs:
     - name: Build the Docker image
       uses: docker/build-push-action@v3.2.0
       with:
-        context: .
-        file: ./LakeHub/Dockerfile
+        context: ./LakeHub
+        file: ./Dockerfile
         tags: ghcr.io/lakelink/hub:latest
         push: true
         cache-from: type=registry,ref=ghcr.io/lakelink/hub:latest
+        cache-to: type=inline
+    - name: Build the Docker image
+      uses: docker/build-push-action@v3.2.0
+      with:
+        context: ./Cas2Discourse
+        file: ./Dockerfile
+        tags: ghcr.io/lakelink/cas2discourse:latest
+        push: true
+        cache-from: type=registry,ref=ghcr.io/lakelink/cas2discourse:latest
         cache-to: type=inline
