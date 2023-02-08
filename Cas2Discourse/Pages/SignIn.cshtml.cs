@@ -46,7 +46,7 @@ namespace Cas2Discourse.Pages
                 { "external_id", InputCasId },
                 { "name", JsonPrincipleAttribs.GetProperty("name").GetString()! },
                 { "email", InputEmail! },
-                { "email_verified", "false" },
+                { "require_activation", "true" },
                 // user_field_{id}, id can be found in the url of each custom field or through api response
                 { "custom.user_field_1", JsonPrincipleAttribs.GetProperty("organization").GetString()! }
             });
