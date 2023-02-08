@@ -7,12 +7,6 @@ module.exports = {
         "./Views/**/*.cshtml",
         "./Areas/**/*.cshtml"
     ],
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Inter var', ...defaultTheme.fontFamily.sans]
-            }
-        },
-    },
+    theme: {},
     plugins: [],
 }

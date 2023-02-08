@@ -17,6 +17,8 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+app.UsePathBase("/_sso");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
