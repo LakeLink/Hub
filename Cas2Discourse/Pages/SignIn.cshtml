@@ -10,32 +10,48 @@
             Connect with your account at 统一身份认证平台/University Portal/SSO
         </p>
     </div>
-    <div asp-validation-summary="All" class="text-red-500"></div>
-    <form class="mt-2 space-y-6" method="POST" autocomplete="on">
+    @if (Model.UnknownError)
+    {
+        <span class="text-red-500">An unknown error has occured. Please contact our support team if convenient.</span>
+    }
+    <form class="mt-2 space-y-6 w-10/12" method="POST" autocomplete="on">
         <div class="shadow-lg">
             <div>
-                @*                <input asp-for="InputCASId" required
-                class="block w-full rounded-t-md border border-red-400 px-3 py-2 text-red-600 placeholder-red-500"
-                placeholder="Wrong ID" />*@
-                <input asp-for="InputCasId" required
+                @if (Model.WrongId)
+                {
+                    <input asp-for="InputCasId" required
+                    class="block w-full rounded-t-md border border-red-400 px-3 py-2 text-red-600 placeholder-red-500"
+                    placeholder="Wrong ID" />
+                }
+                else
+                {
+                    <input asp-for="InputCasId" required autocomplete="username"
                        class="block w-full rounded-t-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
                        placeholder="ID" />
+                }
+
             </div>
             <div>
                 @*                <input asp-for="InputCASId" required
                 class="block w-full rounded-t-md border border-red-400 px-3 py-2 text-red-600 placeholder-red-500"
                 placeholder="Wrong ID" />*@
-                <input asp-for="InputEmail" required
+                <input asp-for="InputEmail" required autocomplete="email"
                        class="block w-full border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
                        placeholder="Email" />
             </div>
             <div>
-                @*                <input asp-for="InputPassword" required
-                class="block w-full rounded-b-md border border-red-400 px-3 py-2 text-gray-600 placeholder-red-500"
-                placeholder="Wrong password" />*@
+                @if (Model.WrongPassword) {
                 <input asp-for="InputPassword" required
+                       class="block w-full rounded-b-md border border-red-400 px-3 py-2 text-gray-600 placeholder-red-500"
+                       placeholder="Wrong password" />
+                }
+                else
+                {
+                    <input asp-for="InputPassword" required autocomplete="current-password"
                        class="block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
                        placeholder="Password" />
+                }
+                
             </div>
         </div>
 
