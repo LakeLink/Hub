@@ -17,8 +17,8 @@ jobs:
       run: git lfs checkout
     - name: Download Tailwind CSS
       run: |
-        curl --fail --location -o /usr/bin/tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
-        chmod +x /usr/bin/tailwindcss
+        curl --fail --location -o /tmp/tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+        chmod +x /tmp/tailwindcss
     - name: Docker Login
       uses: docker/login-action@v2.1.0
       with:
@@ -28,7 +28,7 @@ jobs:
 
     - name: Hub - Build Tailwind CSS
       working-directory: ./LakeHub
-      run: ./tailwindcss-linux-x64 build -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --minify
+      run: /tmp/tailwindcss build -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --minify
     - name: Hub - Build the Docker image
       uses: docker/build-push-action@v3.2.0
       with:
@@ -41,7 +41,7 @@ jobs:
 
     - name: Cas2Discourse - Build Tailwind CSS
       working-directory: ./Cas2Discourse
-      run: ./tailwindcss-linux-x64 build -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --minify
+      run: /tmp/tailwindcss build -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --minify
     - name: Cas2Discourse - Build the Docker image
       uses: docker/build-push-action@v3.2.0
       with:
