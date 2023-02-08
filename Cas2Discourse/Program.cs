@@ -4,12 +4,6 @@ using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-});
-
 // CAS integration
 builder.Services
     .AddRefitClient<ICASRestProtocol>()
