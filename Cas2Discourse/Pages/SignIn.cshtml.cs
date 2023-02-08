@@ -81,7 +81,7 @@ namespace Cas2Discourse.Pages
                 else
                 {
                     UnknownError = true;
-                    ModelState.AddModelError(string.Empty, "Gateway returned an unexpected error.");
+                    _logger.LogWarning("Gateway returned an unexpected error | {Address} {CASId}", HttpContext.Connection.RemoteIpAddress, InputCasId);
                 }
                 return Page();
             }
