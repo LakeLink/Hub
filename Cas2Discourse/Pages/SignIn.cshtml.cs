@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -22,6 +23,7 @@ namespace Cas2Discourse.Pages
         public string? InputEmail { get; set; }
 
         [BindProperty]
+        [DataType(DataType.Password)]
         public string? InputPassword { get; set; }
 
         public SignInModel(ILogger<SignInModel> logger, ICASRestProtocol cas, DiscourseSsoProtocol sso)
