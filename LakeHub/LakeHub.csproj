@@ -8,39 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Controllers\DiscourseController.cs.disabled" />
-    <None Remove="Pages\Auth\Discourse.cshtml.cs.disabled" />
-    <None Remove="Pages\Auth\Discourse.cshtml.disabled" />
-    <None Remove="Pages\Auth\SignOut.cshtml.disabled" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Controllers\DiscourseController.cs.disabled" />
-    <Compile Include="Pages\Auth\Discourse.cshtml.cs.disabled" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Pages\Auth\Discourse.cshtml.disabled" />
-    <Content Include="Pages\Auth\SignOut.cshtml.disabled" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
-    <PackageReference Include="OpenIddict.AspNetCore" Version="3.1.1" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Pages\Shared\" />
   </ItemGroup>
 

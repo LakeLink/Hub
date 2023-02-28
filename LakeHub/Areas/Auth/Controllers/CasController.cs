@@ -1,16 +1,11 @@
 ﻿using LakeHub.Areas.Auth.Models;
-using LakeHub.Models;
-using LakeHub.Options;
 using LakeHub.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Options;
 using Refit;
 using System.Net;
-using System.Net.Mail;
 using System.Security.Claims;
 using System.Text.Json;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
@@ -22,15 +17,11 @@ namespace LakeHub.Areas.Auth.Controllers
     {
         private readonly ILogger<CasController> _logger;
         private readonly ICASRestProtocol _cas;
-        private readonly LakeHubContext _db;
-        private readonly MailOptions _mailOptions;
 
-        public CasController(ILogger<CasController> logger, ICASRestProtocol cas, IOptionsMonitor<MailOptions> options, LakeHubContext dbCtx)
+        public CasController(ILogger<CasController> logger, ICASRestProtocol cas)
         {
             _logger = logger;
             _cas = cas;
-            _db = dbCtx;
-            _mailOptions = options.CurrentValue;
         }
         public IActionResult Index()
         {
@@ -56,29 +47,13 @@ namespace LakeHub.Areas.Auth.Controllers
 
                 LoginSuccess = true;
 
-                var user = await _db.User.FindAsync(cred.InputCASId);
-                if (user == null)
-                {
-                    user = new DbUser(cred.InputCASId!, JsonPrincipleAttribs.GetProperty("name").GetString()!)
-                    {
-                        Org = JsonPrincipleAttribs.GetProperty("organization").GetString()!,
-                        // orAGnizEtion_id ???
-                        OrgId = Convert.ToInt32(JsonPrincipleAttribs.GetProperty("oragnizetion_id").GetString()!),
-                        Identity = JsonPrincipleAttribs.GetProperty("identity").GetString()!
-                    };
-
-                    _db.User.Add(user);
-                }
-
-                var task = _db.SaveChangesAsync();
-
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, cred.InputCASId),
                     new Claim("cas:password", cred.InputPassword),
-                    new Claim(ClaimTypes.Name, user.Name!),
+                    new Claim(ClaimTypes.Name, JsonPrincipleAttribs.GetProperty("name").GetString()!),
                     // new Claim("pycc", JsonPrincipleAttribs.GetProperty("pycc").GetString()!),
-                    new Claim("cas:organization", user.Org!)
+                    new Claim("cas:organization", JsonPrincipleAttribs.GetProperty("organization").GetString()!)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, "id", "role");
@@ -89,25 +64,8 @@ namespace LakeHub.Areas.Auth.Controllers
                     AllowRefresh = true,
                     IsPersistent = cred.TrustThisDevice,
                 };
-
-                // If don't work, please check options.LoginPath at Services.AddCookie()
-                if (user.Email == null || !user.EmailVerified)
-                {
-                    authProperties.RedirectUri = Url.Action("Email", new
-                    {
-                        ReturnUrl
-                    });
-                }
-                else
-                {
-                    // https://github.com/dotnet/aspnetcore/blob/main/src/Security/Authentication/Cookies/src/CookieAuthenticationHandler.cs#L416
-                    authProperties.RedirectUri = ReturnUrl ?? Url.Page("/Index");
-                }
-
-                var ret = SignIn(new ClaimsPrincipal(claimsIdentity), authProperties, CookieAuthenticationDefaults.AuthenticationScheme);
                 _logger.LogInformation("User {CASId} signed in from {Address}", cred.InputCASId, HttpContext.Connection.RemoteIpAddress);
-                await task;
-                return ret;
+                return SignIn(new ClaimsPrincipal(claimsIdentity), authProperties, CookieAuthenticationDefaults.AuthenticationScheme);
             }
             catch (ApiException e)
             {
@@ -138,7 +96,6 @@ namespace LakeHub.Areas.Auth.Controllers
             //     //return Page();
             // }
         }
-
         public async Task<IActionResult> SignOutAsync()
         {
             var signOut = HttpContext.SignOutAsync();
@@ -147,98 +104,6 @@ namespace LakeHub.Areas.Auth.Controllers
 
             return RedirectToPage("/Index");
         }
-
-        [HttpGet]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public IActionResult Email()
-        {
-            return View(new CasEmailForm());
-        }
-
-        [HttpPost]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> EmailAsync(string? ReturnUrl, CasEmailForm e)
-        {
-            if (ModelState["InputEmail"]!.ValidationState == ModelValidationState.Invalid /* || !Email.ToLower().EndsWith("@westlake.edu.cn")*/)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid e-mail address.");
-                return View(e);
-            } // Now we have a valid email input
-            string casId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            DbUser user = (await _db.User.FindAsync(casId))!;
-            if (e.InputVerifyCode == null) // No verification code, generate it
-            {
-                int code = Random.Shared.Next(1, 999999);
-
-                // Must wait: ensure the code is sent.
-                await SendVerifyCode(user.Name, e.InputEmail, code);
-                _logger.LogInformation("Verification email sent to {Email} for user {CASId} from {Address}", e.InputEmail, casId, HttpContext.Connection.RemoteIpAddress);
-
-                HttpContext.Session.SetString("pendingEmail", e.InputEmail);
-                HttpContext.Session.SetInt32("verifyCode", code);
-                e.VerifyCodeSent = true;
-                return View(e);
-            }
-            else // Verification code submitted
-            {
-                // Do not use InputEmail: can be modified by user (IDOR)
-                if (HttpContext.Session.GetString("pendingEmail") != null && HttpContext.Session.GetInt32("verifyCode") == e.InputVerifyCode)
-                {
-                    user.Email = HttpContext.Session.GetString("pendingEmail");
-                    user.EmailVerified = true;
-                    user.IPAtEmailVerify = HttpContext.Connection.RemoteIpAddress!.ToString();
-                    var task = _db.SaveChangesAsync();
-                    _logger.LogInformation("Email verified for user {CASId} from {Address}", casId, HttpContext.Connection.RemoteIpAddress);
-                    await task;
-
-                    if (ReturnUrl == null) return RedirectToPage("/Index");
-                    else return Redirect(ReturnUrl);
-                }
-                else // Something goes wrong, wipe everything.
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid verification code.");
-                    HttpContext.Session.Remove("verifyCode");
-                    HttpContext.Session.Remove("pendingEmail");
-                    e.VerifyCodeSent = false;
-                    _logger.LogWarning("Invalid verification code for {CASId} and {Email} from {Address}", casId, e.InputEmail, HttpContext.Connection.RemoteIpAddress);
-                    return View(e);
-                }
-            }
-        }
-        private async Task SendVerifyCode(string name, string email, int code)
-        {
-            // No need for MailKit
-            //using var client = new SmtpClient();
-            //await client.ConnectAsync(_options.SmtpServer, _options.SmtpPort, SecureSocketOptions.StartTlsWhenAvailable);
-            //Task authTask = client.AuthenticateAsync(_options.SysEmail, _options.SmtpPassword);
-
-            //var m = new MimeMessage();
-            //m.From.Add(new MailboxAddress("Discourse", _options.SysEmail));
-            //m.To.Add(new MailboxAddress(name, email));
-            //m.Subject = "Email Verification - Discourse";
-            //m.Body = new TextPart("plain")
-            //{
-            //    Text = 
-            //};
-
-            //await authTask;
-            //await client.SendAsync(m);
-            //await client.DisconnectAsync(true);
-
-            using var client = new SmtpClient(_mailOptions.SmtpServer, _mailOptions.SmtpPort);
-
-            client.EnableSsl = true; // Enable STARTTLS
-            client.Credentials = new NetworkCredential(_mailOptions.SysEmail, _mailOptions.SmtpPassword);
-            var msg = new MailMessage(
-                new MailAddress(_mailOptions.SysEmail!), new MailAddress(email, name)
-                )
-            {
-                Subject = "Email Verification - LakeHub",
-                Body = $"Welcome to Discourse, {name}!\n\nYour verification code is {code}.\n\nHave a nice day!"
-            };
-            await client.SendMailAsync(msg);
-        }
-
 
         private async Task<string> refreshTGT(CASUsernamePasswordCredential cred)
         {
