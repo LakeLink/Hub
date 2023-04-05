@@ -1,3 +1,0 @@
-*.exe filter=lfs diff=lfs merge=lfs -text
-wwwroot/font/** filter=lfs diff=lfs merge=lfs -text
-wwwroot/img/** filter=lfs diff=lfs merge=lfs -text
