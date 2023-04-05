@@ -6,12 +6,11 @@ import { sessionOptions } from "~/lib/session";
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   try {
     const userInfo = await casV1Users(request.body.username, request.body.password)
-    const attr = userInfo["authentication"]["successes"]["RestAuthenticationHandler"]["principal"]["attributes"]
     request.session.user = {
         verified: true,
-        role: attr.identity,
-        realName: attr.name,
-        organization: attr.organization,
+        role: userInfo.identity,
+        realName: userInfo.name,
+        organization: userInfo.organization,
         casId: request.body.username,
         casPassword: request.body.password
     }
