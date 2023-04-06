@@ -14,6 +14,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cbor-extract/cbor-extract-darwin-arm64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-darwin-arm64@npm:2.1.1"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-darwin-x64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-darwin-x64@npm:2.1.1"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-arm64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-linux-arm64@npm:2.1.1"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-arm@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-linux-arm@npm:2.1.1"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-x64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-linux-x64@npm:2.1.1"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-win32-x64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-win32-x64@npm:2.1.1"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@eslint-community/eslint-utils@npm:^4.2.0":
   version: 4.4.0
   resolution: "@eslint-community/eslint-utils@npm:4.4.0"
@@ -69,6 +111,13 @@ __metadata:
   peerDependencies:
     react: ">= 16"
   checksum: 31677c9b95de4ea92efa205c7a803c33003d3203b0cebf9ca74522485e5351caff7070cbd898885bf050f181682cab8d4815cbef0e7624c56d3312cdf50d2cb9
+  languageName: node
+  linkType: hard
+
+"@hexagon/base64@npm:^1.1.25":
+  version: 1.1.26
+  resolution: "@hexagon/base64@npm:1.1.26"
+  checksum: 596ccc3973a2f9481b25dbbc840fe3209b90fa57649f781126396c64c4d31228f8b1953ebc21d5723805cca138b86249f08d29b5bad2b2987bd15c5f97d08faf
   languageName: node
   linkType: hard
 
@@ -251,7 +300,42 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-schema@npm:^2.3.6":
+"@peculiar/asn1-android@npm:^2.3.3":
+  version: 2.3.6
+  resolution: "@peculiar/asn1-android@npm:2.3.6"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.3.6
+    asn1js: ^3.0.5
+    tslib: ^2.4.0
+  checksum: 66615ada47238e91a42eaefe21501d9b49a8eb769c23a508d1f2aca345a2e03aa2860666d3bac7cf47eb09d10f3800c564d63a2a91c7dce13f90b01a4208f625
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-ecc@npm:^2.3.4":
+  version: 2.3.6
+  resolution: "@peculiar/asn1-ecc@npm:2.3.6"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.3.6
+    "@peculiar/asn1-x509": ^2.3.6
+    asn1js: ^3.0.5
+    tslib: ^2.4.0
+  checksum: 4b9a383dd443fbb9699d79550e03d1185781885768d8c7b780e26a959344286a53539824fa4a3103e9e8393a7d062fe6820bf79abafb340dc18ee5ce81b1d470
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-rsa@npm:^2.3.4":
+  version: 2.3.6
+  resolution: "@peculiar/asn1-rsa@npm:2.3.6"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.3.6
+    "@peculiar/asn1-x509": ^2.3.6
+    asn1js: ^3.0.5
+    tslib: ^2.4.0
+  checksum: 120dda00af6e1b1e5568826ac8211d60d36b3cbe91b086cae6b5ba132f1670ba129284068110305b237550e402c0beeda45fd713d640f97ad11d8cf6c925b31a
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-schema@npm:^2.3.3, @peculiar/asn1-schema@npm:^2.3.6":
   version: 2.3.6
   resolution: "@peculiar/asn1-schema@npm:2.3.6"
   dependencies:
@@ -259,6 +343,19 @@ __metadata:
     pvtsutils: ^1.3.2
     tslib: ^2.4.0
   checksum: fc09387c6e3dea07fca21b54ea8c71ce3ec0f8c92377237e51aef729f0c2df92781aa7a18a546a6fe809519faeaa222df576ec21a35c6095037a78677204a55b
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-x509@npm:^2.3.4, @peculiar/asn1-x509@npm:^2.3.6":
+  version: 2.3.6
+  resolution: "@peculiar/asn1-x509@npm:2.3.6"
+  dependencies:
+    "@peculiar/asn1-schema": ^2.3.6
+    asn1js: ^3.0.5
+    ipaddr.js: ^2.0.1
+    pvtsutils: ^1.3.2
+    tslib: ^2.4.0
+  checksum: 6e946bd44091fb88f617c3bbf54ed1113ed2b249675dd36004513444f409160f6d446bdb82d3cb6041b4d15c68fa4cf40ad452891a5f85dda2af89ee5b0590d2
   languageName: node
   linkType: hard
 
@@ -302,6 +399,53 @@ __metadata:
   version: 1.2.0
   resolution: "@rushstack/eslint-patch@npm:1.2.0"
   checksum: faa749faae0e83c26ae9eb00ad36a897ac78f3cf27da8e8ff21c00bcf7973b598d823d8f2b3957ef66079288bcf577f94df831eae2d65f3f68d8ca32f18b6aff
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/browser@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@simplewebauthn/browser@npm:7.2.0"
+  dependencies:
+    "@simplewebauthn/typescript-types": "*"
+  checksum: 1eb8193e671307936cca3305b44860716e3c081effb83f11f35293cb411fc07e47c3e1ce0194322afab9d24b5e5cbde8c566daf8a21dcf8b2d872169cd04ce3d
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/iso-webcrypto@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@simplewebauthn/iso-webcrypto@npm:7.2.0"
+  dependencies:
+    "@simplewebauthn/typescript-types": "*"
+    "@types/node": ^18.11.9
+  checksum: 663b3cf8b88987e5a87126d3f35f92941756682aa13af4816fffe3a9547eb344fc433f817502a7e7066d6179270afdd5ea18638a629c4218b433c77f6669f14b
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/server@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@simplewebauthn/server@npm:7.2.0"
+  dependencies:
+    "@hexagon/base64": ^1.1.25
+    "@peculiar/asn1-android": ^2.3.3
+    "@peculiar/asn1-ecc": ^2.3.4
+    "@peculiar/asn1-rsa": ^2.3.4
+    "@peculiar/asn1-schema": ^2.3.3
+    "@peculiar/asn1-x509": ^2.3.4
+    "@simplewebauthn/iso-webcrypto": ^7.2.0
+    "@simplewebauthn/typescript-types": "*"
+    "@types/debug": ^4.1.7
+    "@types/node": ^18.11.9
+    cbor-x: ^1.4.1
+    cross-fetch: ^3.1.5
+    debug: ^4.3.2
+  checksum: 6340e94be8f1705f59477d92324a0f3910fab48bbfff59e12e1660259161fdddb6d24b992915017277a18df6b0e3508d520918c2e4eac16eb299f498cfa3ccb6
+  languageName: node
+  linkType: hard
+
+"@simplewebauthn/typescript-types@npm:*, @simplewebauthn/typescript-types@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@simplewebauthn/typescript-types@npm:7.0.0"
+  checksum: 11e55e74035e4a88287d5a615939c9cfffc6e05520dc947b68d77a1b5b301707137c2e29b5b279f91e3e4a9b472226fb6c7025144a6057990b6841145fdd4959
   languageName: node
   linkType: hard
 
@@ -372,6 +516,15 @@ __metadata:
     "@types/keygrip": "*"
     "@types/node": "*"
   checksum: d3759efc1182cb0651808570ae13638677b67b0ea724eef7b174e58ffe6ea044b62c7c2715e532f76f88fce4dd8101ed32ac6fbb73226db654017924e8a2a1e6
+  languageName: node
+  linkType: hard
+
+"@types/debug@npm:^4.1.7":
+  version: 4.1.7
+  resolution: "@types/debug@npm:4.1.7"
+  dependencies:
+    "@types/ms": "*"
+  checksum: 0a7b89d8ed72526858f0b61c6fd81f477853e8c4415bb97f48b1b5545248d2ae389931680b94b393b993a7cfe893537a200647d93defe6d87159b96812305adc
   languageName: node
   linkType: hard
 
@@ -458,7 +611,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:18.15.11":
+"@types/ms@npm:*":
+  version: 0.7.31
+  resolution: "@types/ms@npm:0.7.31"
+  checksum: daadd354aedde024cce6f5aa873fefe7b71b22cd0e28632a69e8b677aeb48ae8caa1c60e5919bb781df040d116b01cb4316335167a3fc0ef6a63fa3614c0f6da
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:*, @types/node@npm:18.15.11, @types/node@npm:^18.11.9":
   version: 18.15.11
   resolution: "@types/node@npm:18.15.11"
   checksum: 977b4ad04708897ff0eb049ecf82246d210939c82461922d20f7d2dcfd81bbc661582ba3af28869210f7e8b1934529dcd46bff7d448551400f9d48b9d3bddec3
@@ -1003,6 +1163,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cbor-extract@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "cbor-extract@npm:2.1.1"
+  dependencies:
+    "@cbor-extract/cbor-extract-darwin-arm64": 2.1.1
+    "@cbor-extract/cbor-extract-darwin-x64": 2.1.1
+    "@cbor-extract/cbor-extract-linux-arm": 2.1.1
+    "@cbor-extract/cbor-extract-linux-arm64": 2.1.1
+    "@cbor-extract/cbor-extract-linux-x64": 2.1.1
+    "@cbor-extract/cbor-extract-win32-x64": 2.1.1
+    node-gyp: latest
+    node-gyp-build-optional-packages: 5.0.3
+  dependenciesMeta:
+    "@cbor-extract/cbor-extract-darwin-arm64":
+      optional: true
+    "@cbor-extract/cbor-extract-darwin-x64":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-arm":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-arm64":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-x64":
+      optional: true
+    "@cbor-extract/cbor-extract-win32-x64":
+      optional: true
+  bin:
+    download-cbor-prebuilds: bin/download-prebuilds.js
+  checksum: 283d9cdb3c716b171b5ad8666673f4ac373f975b51d9a38233d280c6f9381d66c6af4c011a561d993c4be6e427e34681bc3c5af194b9da0c9ab3401d424b7988
+  languageName: node
+  linkType: hard
+
+"cbor-x@npm:^1.4.1":
+  version: 1.5.2
+  resolution: "cbor-x@npm:1.5.2"
+  dependencies:
+    cbor-extract: ^2.1.1
+  dependenciesMeta:
+    cbor-extract:
+      optional: true
+  checksum: 2c473622f61a3b2a1ff5fb493e2db00b8cd02d59704191c9f3af21ad97ec0019360ea1301fc18f35eb4138bc737986d04ee6f094a6b2dc71e6b4c69c6f584c0c
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^4.0.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
@@ -1103,6 +1306,15 @@ __metadata:
   version: 0.5.0
   resolution: "cookie@npm:0.5.0"
   checksum: 1f4bd2ca5765f8c9689a7e8954183f5332139eb72b6ff783d8947032ec1fdf43109852c178e21a953a30c0dd42257828185be01b49d1eb1a67fd054ca588a180
+  languageName: node
+  linkType: hard
+
+"cross-fetch@npm:^3.1.5":
+  version: 3.1.5
+  resolution: "cross-fetch@npm:3.1.5"
+  dependencies:
+    node-fetch: 2.6.7
+  checksum: f6b8c6ee3ef993ace6277fd789c71b6acf1b504fd5f5c7128df4ef2f125a429e29cd62dc8c127523f04a5f2fa4771ed80e3f3d9695617f441425045f505cf3bb
   languageName: node
   linkType: hard
 
@@ -2141,6 +2353,9 @@ __metadata:
   resolution: "hub@workspace:."
   dependencies:
     "@heroicons/react": ^2.0.17
+    "@simplewebauthn/browser": ^7.2.0
+    "@simplewebauthn/server": ^7.2.0
+    "@simplewebauthn/typescript-types": ^7.0.0
     "@types/node": 18.15.11
     "@types/react": 18.0.33
     autoprefixer: ^10.4.14
@@ -2252,6 +2467,13 @@ __metadata:
   version: 2.0.0
   resolution: "ip@npm:2.0.0"
   checksum: cfcfac6b873b701996d71ec82a7dd27ba92450afdb421e356f44044ed688df04567344c36cbacea7d01b1c39a4c732dc012570ebe9bebfb06f27314bca625349
+  languageName: node
+  linkType: hard
+
+"ipaddr.js@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "ipaddr.js@npm:2.0.1"
+  checksum: dd194a394a843d470f88d17191b0948f383ed1c8e320813f850c336a0fcb5e9215d97ec26ca35ab4fbbd31392c8b3467f3e8344628029ed3710b2ff6b5d1034e
   languageName: node
   linkType: hard
 
@@ -3009,6 +3231,31 @@ __metadata:
   bin:
     next: dist/bin/next
   checksum: 8531dee41b60181b582f5ee80858907b102f083ef8808ff9352d589dd39e6b3a96f7a11b3776a03eef3a28430cff768336fa2e3ff2c6f8fcd699fbc891749051
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:2.6.7":
+  version: 2.6.7
+  resolution: "node-fetch@npm:2.6.7"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: 8d816ffd1ee22cab8301c7756ef04f3437f18dace86a1dae22cf81db8ef29c0bf6655f3215cb0cdb22b420b6fe141e64b26905e7f33f9377a7fa59135ea3e10b
+  languageName: node
+  linkType: hard
+
+"node-gyp-build-optional-packages@npm:5.0.3":
+  version: 5.0.3
+  resolution: "node-gyp-build-optional-packages@npm:5.0.3"
+  bin:
+    node-gyp-build-optional-packages: bin.js
+    node-gyp-build-optional-packages-optional: optional.js
+    node-gyp-build-optional-packages-test: build-test.js
+  checksum: be3f0235925c8361e5bc1a03848f5e24815b0df8aa90bd13f1eac91cd86264bbb8b7689ca6cd083b02c8099c7b54f9fb83066c7bb77c2389dc4eceab921f084f
   languageName: node
   linkType: hard
 
@@ -4076,6 +4323,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tr46@npm:~0.0.3":
+  version: 0.0.3
+  resolution: "tr46@npm:0.0.3"
+  checksum: 726321c5eaf41b5002e17ffbd1fb7245999a073e8979085dacd47c4b4e8068ff5777142fc6726d6ca1fd2ff16921b48788b87225cbc57c72636f6efa8efbffe3
+  languageName: node
+  linkType: hard
+
 "ts-interface-checker@npm:^0.1.9":
   version: 0.1.13
   resolution: "ts-interface-checker@npm:0.1.13"
@@ -4240,6 +4494,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"webidl-conversions@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "webidl-conversions@npm:3.0.1"
+  checksum: c92a0a6ab95314bde9c32e1d0a6dfac83b578f8fa5f21e675bc2706ed6981bc26b7eb7e6a1fab158e5ce4adf9caa4a0aee49a52505d4d13c7be545f15021b17c
+  languageName: node
+  linkType: hard
+
 "webidl-conversions@npm:^7.0.0":
   version: 7.0.0
   resolution: "webidl-conversions@npm:7.0.0"
@@ -4254,6 +4515,16 @@ __metadata:
     tr46: ^3.0.0
     webidl-conversions: ^7.0.0
   checksum: ed4826aaa57e66bb3488a4b25c9cd476c46ba96052747388b5801f137dd740b73fde91ad207d96baf9f17fbcc80fc1a477ad65181b5eb5fa718d27c69501d7af
+  languageName: node
+  linkType: hard
+
+"whatwg-url@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "whatwg-url@npm:5.0.0"
+  dependencies:
+    tr46: ~0.0.3
+    webidl-conversions: ^3.0.0
+  checksum: b8daed4ad3356cc4899048a15b2c143a9aed0dfae1f611ebd55073310c7b910f522ad75d727346ad64203d7e6c79ef25eafd465f4d12775ca44b90fa82ed9e2c
   languageName: node
   linkType: hard
 
