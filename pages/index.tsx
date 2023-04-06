@@ -4,9 +4,13 @@ import Link from 'next/link';
 import { links } from '~/indexLinks'
 import { sessionOptions } from '~/lib/session';
 import { ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import mongo from '~/lib/mongo';
+import { ObjectId } from 'mongodb';
+import { User } from '~/lib/user';
 
 export default function Index({
-  user,
+  verified,
+  org,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   let linkElements = links.map((v, idx) =>
     <div key={idx} className="flex flex-col items-center hover:scale-105 transition">
@@ -31,8 +35,8 @@ export default function Index({
   return <>
     <div className="max-w-screen-lg w-full mx-auto flex flex-col justify-center text-gray-50 py-6 sm:py-10">
       {
-        user ?
-          <h1 className="self-center text-xl pb-10">Hi there,<br /> My friend from {user.organization} ✨</h1>
+        verified ?
+          <h1 className="self-center text-xl pb-10">Hi there,<br /> My friend from {org} ✨</h1>
           :
           <h1 className="self-center text-xl pb-10">Nice to meet you!</h1>
       }
@@ -53,7 +57,7 @@ export default function Index({
       <div className="w-full border-y border-gray-200 my-8"></div>
       <div className="grid grid-cols-5 gap-y-6 justify-between justify-items-center text-sm">
         {
-          user ?
+          verified ?
             <div className="flex flex-col items-center hover:scale-105 transition">
               <Link href='/api/auth/signOut'
                 className="mb-1 rounded-xl shadow-xl  bg-slate-900  hover:bg-slate-800 text-center h-12 w-12  sm:h-16 sm:w-16  md:h-20 md:w-20  flex place-items-center justify-center">
@@ -78,11 +82,13 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   req,
   res,
 }) {
-  const user = req.session.user;
-
+  const client = await mongo
+  const db = client.db('lakehub')
+  const user = await db.collection<User>('users').findOne({ _id: new ObjectId(req.session.userId)}) as User;
   return {
     props: {
-      user: user ? user : null
+      verified: user?.verified ?? null,
+      org: user?.org ?? null,
     }
   }
 },

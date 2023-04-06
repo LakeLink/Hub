@@ -1,11 +1,16 @@
 import { withIronSessionApiRoute } from "iron-session/next";
+import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { casV1Tickets, casV1Users } from "~/lib/cas";
+import mongo from "~/lib/mongo";
 import { sessionOptions } from "~/lib/session";
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
-    const tgt = await casV1Tickets(request.session.user.casId, request.session.user.casPassword)
-    const {redirectUrl} = request.query
+    const client = await mongo
+    const db = client.db('lakehub')
+    const user = await db.collection('users').findOne({ _id: new ObjectId(request.session.userId) })
+    const tgt = await casV1Tickets(user.casId, user.casPassword)
+    const { redirectUrl } = request.query
     const st = await fetch(tgt, {
         method: 'POST',
         body: new URLSearchParams({ service: redirectUrl as string })
