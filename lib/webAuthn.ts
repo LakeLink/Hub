@@ -19,9 +19,8 @@ const origin = `http://localhost:3000`;
 export async function auth(user: User, response: AuthenticationResponseJSON, expectedChallenge: string) {
     // (Pseudocode} Retrieve an authenticator from the DB that
     // should match the `id` in the returned credential
-    // console.log(user)
-    const a = user.authenticators.find(e => e.credentialID.buffer == Buffer.from(response.rawId, 'base64url'));
 
+    const a = user.authenticators.find(e => Buffer.compare(e.credentialID.buffer, Buffer.from(response.rawId, 'base64url')) == 0);
     if (!a) {
         throw new Error(`Could not find authenticator ${response.id} for user ${user.casId}`);
     }
@@ -41,7 +40,6 @@ export async function auth(user: User, response: AuthenticationResponseJSON, exp
 }
 
 export function genAuthentication(user: User) {
-    // console.log(user.authenticators[0].credentialID)
     return generateAuthenticationOptions({
         // Require users to use a previously-registered authenticator
         allowCredentials: user.authenticators.map(authenticator => ({
@@ -82,6 +80,7 @@ export async function register(userId: ObjectId, response: RegistrationResponseJ
     });
 
     const { registrationInfo } = verification;
+    if (!registrationInfo) throw new Error('No registrationInfo')
     const { credentialPublicKey, credentialID, counter } = registrationInfo;
 
     const newAuthenticator: Authenticator = {
@@ -92,8 +91,8 @@ export async function register(userId: ObjectId, response: RegistrationResponseJ
 
     const col = (await mongo).db('lakehub').collection<User>('users')
     let r = await col.updateOne(
-        { _id: userId, authenticators: { credentialID: { $ne: newAuthenticator.credentialID } } },
-        { $push: { authenticators: newAuthenticator } }
+        { _id: userId },
+        { $addToSet: { authenticators: newAuthenticator } }
     )
     return { success: r.modifiedCount == 1 }
 }

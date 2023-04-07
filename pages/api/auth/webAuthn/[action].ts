@@ -9,8 +9,8 @@ import mongo from "~/lib/mongo";
 async function handler(request: NextApiRequest, response: NextApiResponse) {
     switch (request.query.action) {
         case 'register':
-            return response.send(
-                register(new ObjectId(request.session.userId), request.body, request.session.challenge)
+            return response.json(
+                await register(new ObjectId(request.session.userId), request.body, request.session.challenge)
             )
         case 'genAuthOptions': {
             const col = (await mongo).db('lakehub').collection<User>('users')
@@ -30,18 +30,17 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
             let user = await col.findOne(
                 { casId: request.body.casId }
             )
-            let verification = await auth(user, request.body.response, request.session.challenge)
+            let verification = await auth(user, request.body.authResponse, request.session.challenge)
 
             request.session.challenge = null
             if (verification.verified) {
-                request.session.userId = user.casId
+                request.session.userId = user._id.toString()
                 col.updateOne(
                     { _id: user._id, authenticators: { credentialID: verification.authenticationInfo.credentialID } },
-                    { "authenticators.$.counter": verification.authenticationInfo.newCounter }
+                    { $set: { "authenticators.$.counter": verification.authenticationInfo.newCounter } }
                 )
             }
             await request.session.save()
-            console.log(verification)
             return response.json(verification)
         }
         default:

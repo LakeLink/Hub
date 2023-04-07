@@ -48,7 +48,11 @@ export default function SignIn() {
           authResponse: asseResp,
           casId: casId.current
         })
-      })
+      }).then(r => r.json())
+
+      if (verification.verified) {
+        document.location.pathname = '/'
+      }
     } catch (error) {
       throw error;
     }
