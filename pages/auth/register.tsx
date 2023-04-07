@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 import mongo from "~/lib/mongo";
 import { User } from "~/lib/user";
 import { InferGetServerSidePropsType } from "next/types";
-import { genRegistration } from "~/lib/webauthn";
+import { genRegistration } from "~/lib/webAuthn";
 
 export default function Register({ options }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
@@ -25,7 +25,7 @@ export default function Register({ options }: InferGetServerSidePropsType<typeof
     console.log(options)
     let attResp = await startRegistration(options);
     console.log(attResp)
-    const verificationResp = await fetch("/api/auth/webauthn?action=register", {
+    const verificationResp = await fetch("/api/auth/webAuthn/register", {
       method: "POST",
       body: JSON.stringify(attResp),
       headers: {

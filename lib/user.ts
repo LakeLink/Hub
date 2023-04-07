@@ -1,9 +1,10 @@
 import { CredentialDeviceType } from "@simplewebauthn/typescript-types";
+import { Binary } from "mongodb";
 
 export interface Authenticator {
     // name: String;
-    credentialID: Buffer;
-    credentialPublicKey: Buffer;
+    credentialID: Binary;
+    credentialPublicKey: Binary;
     counter: number;
     // credentialDeviceType: CredentialDeviceType;
     // credentialBackedUp: boolean;

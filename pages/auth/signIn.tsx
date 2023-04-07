@@ -20,7 +20,7 @@ export default function SignIn() {
     if (!pwdFieldHidden) return
     e.preventDefault()
 
-    let r = await fetch('/api/auth/webauthn?action=genAuthOptions', {
+    let r = await fetch('/api/auth/webAuthn/genAuthOptions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export default function SignIn() {
     try {
       const asseResp = await startAuthentication(await r.json())
       console.log(asseResp)
-      const verification = await fetch('/api/auth/webauthn?action=auth', {
+      const verification = await fetch('/api/auth/webAuthn/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

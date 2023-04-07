@@ -6,7 +6,7 @@ import {
 } from '@simplewebauthn/server'
 import { Authenticator, User } from './user';
 import mongo from './mongo';
-import { ObjectId } from 'mongodb';
+import { Binary, ObjectId } from 'mongodb';
 import { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/typescript-types';
 
 // Human-readable title for your website
@@ -20,9 +20,9 @@ export async function auth(user: User, response: AuthenticationResponseJSON, exp
     // (Pseudocode} Retrieve an authenticator from the DB that
     // should match the `id` in the returned credential
     console.log(user)
-    const authenticator = user.authenticators.find(e => e.credentialID == Buffer.from(response.rawId, 'base64url'));
+    const a = user.authenticators.find(e => e.credentialID.buffer == Buffer.from(response.rawId, 'base64url'));
 
-    if (!authenticator) {
+    if (!a) {
         throw new Error(`Could not find authenticator ${response.id} for user ${user.casId}`);
     }
 
@@ -31,7 +31,11 @@ export async function auth(user: User, response: AuthenticationResponseJSON, exp
             expectedChallenge,
             expectedOrigin: origin,
             expectedRPID: rpID,
-            authenticator,
+            authenticator: {
+                credentialPublicKey: a.credentialPublicKey.buffer,
+                credentialID: a.credentialID.buffer,
+                counter: a.counter
+            }
         });
     return verification
 }
@@ -41,7 +45,7 @@ export function genAuthentication(user: User) {
     return generateAuthenticationOptions({
         // Require users to use a previously-registered authenticator
         allowCredentials: user.authenticators.map(authenticator => ({
-            id: authenticator.credentialID,
+            id: authenticator.credentialID.buffer,
             type: 'public-key',
             // Optional
             //   transports: authenticator.transports,
@@ -81,8 +85,8 @@ export async function register(userId: ObjectId, response: RegistrationResponseJ
     const { credentialPublicKey, credentialID, counter } = registrationInfo;
 
     const newAuthenticator: Authenticator = {
-        credentialID: Buffer.from(credentialID),
-        credentialPublicKey: Buffer.from(credentialPublicKey),
+        credentialID: new Binary(credentialID),
+        credentialPublicKey: new Binary(credentialPublicKey),
         counter,
     };
 

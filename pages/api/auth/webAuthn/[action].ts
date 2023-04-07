@@ -3,11 +3,11 @@ import { sessionOptions } from "~/lib/session";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 import { Authenticator, User } from "~/lib/user";
-import { auth, genAuthentication, register } from "~/lib/webauthn";
+import { auth, genAuthentication, register } from "~/lib/webAuthn";
 import mongo from "~/lib/mongo";
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
-    switch (request.query['action']) {
+    switch (request.query.action) {
         case 'register':
             return response.send(
                 register(new ObjectId(request.session.userId), request.body, request.session.challenge)
