@@ -10,14 +10,16 @@ export default function SignIn() {
   useEffect(() => {
     const checkAvailability = async () => {
       const available =
-        browserSupportsWebAuthn();
-      setWebAuthnAvailable(available);
-    };
-    checkAvailability();
+        browserSupportsWebAuthn()
+      if (!available) setPwdFieldHidden(false)
+      setWebAuthnAvailable(available)
+    }
+    checkAvailability()
   }, []);
 
   async function onSubmit(e: FormEvent) {
-    if (!pwdFieldHidden) return
+    if (!pwdFieldHidden) return // With password: submit directly
+
     e.preventDefault()
 
     let r = await fetch('/api/auth/webAuthn/genAuthOptions', {
@@ -30,14 +32,13 @@ export default function SignIn() {
       })
     })
 
-    if (!r.ok) {
+    if (!r.ok) { // No user, authenticator found
       setPwdFieldHidden(false)
       return
     }
 
     try {
       const asseResp = await startAuthentication(await r.json())
-      console.log(asseResp)
       const verification = await fetch('/api/auth/webAuthn/auth', {
         method: 'POST',
         headers: {
@@ -45,7 +46,6 @@ export default function SignIn() {
         },
         body: JSON.stringify(asseResp)
       })
-      console.log(await verification.json())
     } catch (error) {
       throw error;
     }
@@ -63,11 +63,11 @@ export default function SignIn() {
       <div className="shadow-lg">
         <div>
           <input type="username" id="username" name="username" onChange={(event) => casId.current = event.target.value} autoComplete="webauthn username" required
-            className="block w-full rounded-t-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
+            className="block w-full rounded-t-md {} border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
             placeholder="ID" />
         </div>
         <div>
-          {!pwdFieldHidden && <input type="password" id="password" name="password"
+          {!pwdFieldHidden && <input type="password" id="password" name="password" required
             className="block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
             placeholder="Password" />
           }

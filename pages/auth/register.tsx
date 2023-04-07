@@ -21,10 +21,8 @@ export default function Register({ options }: InferGetServerSidePropsType<typeof
     checkAvailability();
   }, []);
 
-  const handleClick = async () => {
-    console.log(options)
+  async function handleClick() {
     let attResp = await startRegistration(options);
-    console.log(attResp)
     const verificationResp = await fetch("/api/auth/webAuthn/register", {
       method: "POST",
       body: JSON.stringify(attResp),
@@ -34,7 +32,6 @@ export default function Register({ options }: InferGetServerSidePropsType<typeof
     });
 
     const verificationJSON = await verificationResp.json();
-    console.log(verificationJSON)
   };
 
   return (
@@ -54,13 +51,15 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   res,
 }) {
   const col = (await mongo).db('lakehub').collection('users')
-  const user = await col.findOne<User>({ _id: new ObjectId(req.session.userId) });
-  if (!user) return {
+
+  if (!req.session.userId) return {
     redirect: {
       destination: '/auth/signIn',
       permanent: false
     }
   }
+
+  const user = await col.findOne<User>({ _id: new ObjectId(req.session.userId) });
   const options = genRegistration(user)
 
   req.session.challenge = options.challenge
