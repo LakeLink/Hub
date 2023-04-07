@@ -44,7 +44,10 @@ export default function SignIn() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(asseResp)
+        body: JSON.stringify({
+          authResponse: asseResp,
+          casId: casId.current
+        })
       })
     } catch (error) {
       throw error;

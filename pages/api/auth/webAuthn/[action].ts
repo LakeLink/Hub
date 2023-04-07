@@ -30,7 +30,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
             let user = await col.findOne(
                 { casId: request.body.casId }
             )
-            let verification = await auth(user, request.body, request.session.challenge)
+            let verification = await auth(user, request.body.response, request.session.challenge)
 
             request.session.challenge = null
             if (verification.verified) {
@@ -41,6 +41,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
                 )
             }
             await request.session.save()
+            console.log(verification)
             return response.json(verification)
         }
         default:

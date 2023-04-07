@@ -14,12 +14,12 @@ const rpName = 'SimpleWebAuthn Example';
 // A unique identifier for your website
 const rpID = 'localhost';
 // The URL at which registrations and authentications should occur
-const origin = `http://${rpID}:3000`;
+const origin = `http://localhost:3000`;
 
 export async function auth(user: User, response: AuthenticationResponseJSON, expectedChallenge: string) {
     // (Pseudocode} Retrieve an authenticator from the DB that
     // should match the `id` in the returned credential
-    console.log(user)
+    // console.log(user)
     const a = user.authenticators.find(e => e.credentialID.buffer == Buffer.from(response.rawId, 'base64url'));
 
     if (!a) {
@@ -41,7 +41,7 @@ export async function auth(user: User, response: AuthenticationResponseJSON, exp
 }
 
 export function genAuthentication(user: User) {
-    console.log(user.authenticators[0].credentialID)
+    // console.log(user.authenticators[0].credentialID)
     return generateAuthenticationOptions({
         // Require users to use a previously-registered authenticator
         allowCredentials: user.authenticators.map(authenticator => ({
@@ -92,8 +92,8 @@ export async function register(userId: ObjectId, response: RegistrationResponseJ
 
     const col = (await mongo).db('lakehub').collection<User>('users')
     let r = await col.updateOne(
-        { _id: userId },
+        { _id: userId, authenticators: { credentialID: { $ne: newAuthenticator.credentialID } } },
         { $push: { authenticators: newAuthenticator } }
     )
-    return r.modifiedCount == 1
+    return { success: r.modifiedCount == 1 }
 }
