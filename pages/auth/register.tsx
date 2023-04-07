@@ -8,6 +8,7 @@ import { ObjectId } from "mongodb";
 import mongo from "~/lib/mongo";
 import { User } from "~/lib/user";
 import { InferGetServerSidePropsType } from "next/types";
+import { genRegistration } from "~/lib/webauthn";
 
 export default function Register({ options }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
@@ -79,38 +80,11 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   req,
   res,
 }) {
-  // if (isLoggedIn(req)) {
-  //   return {
-  //     redirect: {
-  //       destination: "/admin",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-  // Human-readable title for your website
-  const rpName = 'SimpleWebAuthn Example';
-  // A unique identifier for your website
-  const rpID = 'localhost';
-
   const col = (await mongo).db('lakehub').collection('users')
   const user = await col.findOne<User>({ _id: new ObjectId(req.session.userId) });
 
-  const options = generateRegistrationOptions({
-    rpName,
-    rpID,
-    userID: user.casId,
-    userName: user.realName,
-    // Don't prompt users for additional information about the authenticator
-    // (Recommended for smoother UX)
-    attestationType: 'none',
-    // Prevent users from re-registering existing authenticators
-    excludeCredentials: user.authenticators?.map(c => ({
-      id: c.credentialID,
-      type: 'public-key',
-      // Optional
-      // transports: c.transports,
-    })),
-  });
+  const options = genRegistration(user)
+
   req.session.challenge = options.challenge
   await req.session.save();
 

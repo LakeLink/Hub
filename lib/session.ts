@@ -1,10 +1,13 @@
 // this file is a wrapper with defaults to be used in both API routes and `getServerSideProps` functions
 import type { IronSessionOptions } from "iron-session";
-import type { User } from "./user";
+
+const _randomArray = new Uint8Array(32)
+crypto.getRandomValues(_randomArray)
 
 export const sessionOptions: IronSessionOptions = {
-  password: process.env.COOKIE_PASSWORD as string,
+  password: Buffer.from(_randomArray).toString('base64'),
   cookieName: "lks",
+  ttl: 60 * 5,
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
   },

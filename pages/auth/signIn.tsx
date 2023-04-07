@@ -1,6 +1,49 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid"
+import { browserSupportsWebAuthn, startAuthentication } from "@simplewebauthn/browser";
+import { useState, useEffect, useRef, FormEvent } from "react";
 
 export default function SignIn() {
+  const [webAuthnAvailable, setWebAuthnAvailable] = useState(false)
+  const [pwdFieldHidden, setPwdFieldHidden] = useState(true)
+  const casId = useRef('')
+
+  useEffect(() => {
+    const checkAvailability = async () => {
+      const available =
+        browserSupportsWebAuthn();
+      setWebAuthnAvailable(available);
+    };
+    checkAvailability();
+  }, []);
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault()
+    let params = new URLSearchParams({
+      action: 'genAuthOptions',
+      casId: casId.current
+    })
+    let url = new URL('/api/auth/webauthn')
+    url.search = params.toString()
+    await fetch(url)
+      .then(async r => {
+        console.log(r)
+        try {
+          const asseResp = startAuthentication(await r.json())
+          console.log(asseResp)
+          const verification = await fetch('/api/auth/webauthn?action=auth', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(asseResp)
+          })
+          console.log(await verification.json())
+        } catch (error) {
+          throw error;
+        }
+      })
+  }
+
   return <div className="my-12 pb-12 w-full lg:w-5/12 px-4 mx-auto flex flex-col items-center rounded-xl shadow-xl bg-slate-200 text-slate-700">
     <div className="my-6">
       <h2 className="text-center text-3xl font-bold tracking-tight">LakeHub Authentication Center</h2>
@@ -9,15 +52,15 @@ export default function SignIn() {
       </p>
     </div>
     <div className="text-red-500"></div>
-    <form action="/api/cas/signIn" className="mt-2 space-y-6" method="POST" autoComplete="on">
+    <form action="/api/cas/signIn" className="mt-2 space-y-6" method="POST" autoComplete="on" onSubmit={onSubmit}>
       <div className="shadow-lg">
         <div>
-          <input type="username" id="username" name="username" required
+          <input type="username" id="username" name="username" onChange={(event) => casId.current = event.target.value} autoComplete="webauthn username" required
             className="block w-full rounded-t-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
             placeholder="ID" />
         </div>
         <div>
-          <input type="password" id="password" name="password" required
+          <input type="password" id="password" hidden={pwdFieldHidden} name="password"
             className="block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
             placeholder="Password" />
         </div>
@@ -31,7 +74,7 @@ export default function SignIn() {
           <a className="ml-1 text-sm text-indigo-500 hover:text-indigo-600">What?</a>
         </div>
 
-        <div className="text-sm">
+        <div className="text-sm" hidden={pwdFieldHidden}>
           <a href="https://ssokey.westlake.edu.cn/whistle/retrieve/account"
             className="font-medium text-indigo-500 hover:text-indigo-600">Forgot your password?</a>
         </div>

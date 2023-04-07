@@ -84,7 +84,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
 }) {
   const client = await mongo
   const db = client.db('lakehub')
-  const user = await db.collection<User>('users').findOne({ _id: new ObjectId(req.session.userId)}) as User;
+  const user = await db.collection<User>('users').findOne({ _id: new ObjectId(req.session.userId) }) as User;
   return {
     props: {
       verified: user?.verified ?? null,
