@@ -17,31 +17,38 @@ export default function SignIn() {
   }, []);
 
   async function onSubmit(e: FormEvent) {
+    if (!pwdFieldHidden) return
     e.preventDefault()
-    let params = new URLSearchParams({
-      action: 'genAuthOptions',
-      casId: casId.current
-    })
-    let url = new URL('/api/auth/webauthn')
-    url.search = params.toString()
-    await fetch(url)
-      .then(async r => {
-        console.log(r)
-        try {
-          const asseResp = startAuthentication(await r.json())
-          console.log(asseResp)
-          const verification = await fetch('/api/auth/webauthn?action=auth', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(asseResp)
-          })
-          console.log(await verification.json())
-        } catch (error) {
-          throw error;
-        }
+
+    let r = await fetch('/api/auth/webauthn?action=genAuthOptions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        casId: casId.current
       })
+    })
+
+    if (!r.ok) {
+      setPwdFieldHidden(false)
+      return
+    }
+
+    try {
+      const asseResp = await startAuthentication(await r.json())
+      console.log(asseResp)
+      const verification = await fetch('/api/auth/webauthn?action=auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(asseResp)
+      })
+      console.log(await verification.json())
+    } catch (error) {
+      throw error;
+    }
   }
 
   return <div className="my-12 pb-12 w-full lg:w-5/12 px-4 mx-auto flex flex-col items-center rounded-xl shadow-xl bg-slate-200 text-slate-700">
@@ -60,9 +67,10 @@ export default function SignIn() {
             placeholder="ID" />
         </div>
         <div>
-          <input type="password" id="password" hidden={pwdFieldHidden} name="password"
+          {!pwdFieldHidden && <input type="password" id="password" name="password"
             className="block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-600 placeholder-gray-500"
             placeholder="Password" />
+          }
         </div>
       </div>
 

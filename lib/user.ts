@@ -2,8 +2,8 @@ import { CredentialDeviceType } from "@simplewebauthn/typescript-types";
 
 export interface Authenticator {
     // name: String;
-    credentialID: Uint8Array;
-    credentialPublicKey: Uint8Array;
+    credentialID: Buffer;
+    credentialPublicKey: Buffer;
     counter: number;
     // credentialDeviceType: CredentialDeviceType;
     // credentialBackedUp: boolean;

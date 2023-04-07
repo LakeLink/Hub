@@ -17,7 +17,8 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
         realName: userInfo.name,
         org: userInfo.organization,
         casId: request.body.username,
-        casPassword: request.body.password
+        casPassword: request.body.password,
+        authenticators: []
       },
       {
         upsert: true,
@@ -26,7 +27,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     )
     request.session.userId = r.value._id.toString()
     await request.session.save();
-    response.redirect(302, '/')
+
+    if (r.value.authenticators.length == 0) response.redirect(302, '/auth/register')
+    else response.redirect(302, '/')
   } catch (error) {
     response.status(500).json({ message: (error as Error).message });
   }

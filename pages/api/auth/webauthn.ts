@@ -14,11 +14,12 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
             )
         case 'genAuthOptions': {
             const col = (await mongo).db('lakehub').collection<User>('users')
-            let user = await col.findOne(
-                { casId: request.query['casId'] }
-            )
-            if (!user) return response.status(404)
 
+            let user = await col.findOne(
+                { casId: request.body.casId }
+            )
+            if (!user) return response.status(404).send({ error: 'User not found.' })
+            if (user.authenticators.length == 0) return response.status(404).send({ error: 'No authenticator found.' })
             let r = genAuthentication(user)
             request.session.challenge = r.challenge
             await request.session.save()
@@ -27,7 +28,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
         case 'auth': {
             const col = (await mongo).db('lakehub').collection<User>('users')
             let user = await col.findOne(
-                { casId: request.query['casId'] }
+                { casId: request.body.casId }
             )
             let verification = await auth(user, request.body, request.session.challenge)
 

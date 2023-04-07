@@ -19,6 +19,7 @@ const origin = `http://${rpID}:3000`;
 export async function auth(user: User, response: AuthenticationResponseJSON, expectedChallenge: string) {
     // (Pseudocode} Retrieve an authenticator from the DB that
     // should match the `id` in the returned credential
+    console.log(user)
     const authenticator = user.authenticators.find(e => e.credentialID == Buffer.from(response.rawId, 'base64url'));
 
     if (!authenticator) {
@@ -36,6 +37,7 @@ export async function auth(user: User, response: AuthenticationResponseJSON, exp
 }
 
 export function genAuthentication(user: User) {
+    console.log(user.authenticators[0].credentialID)
     return generateAuthenticationOptions({
         // Require users to use a previously-registered authenticator
         allowCredentials: user.authenticators.map(authenticator => ({
@@ -58,12 +60,12 @@ export function genRegistration(user: User) {
         // (Recommended for smoother UX)
         attestationType: 'none',
         // Prevent users from re-registering existing authenticators
-        excludeCredentials: user.authenticators?.map(c => ({
-            id: c.credentialID,
-            type: 'public-key',
-            // Optional
-            // transports: c.transports,
-        })),
+        // excludeCredentials: user.authenticators.map(c => ({
+        //     id: c.credentialID,
+        //     type: 'public-key',
+        //     // Optional
+        //     // transports: c.transports,
+        // })),
     });
 }
 
@@ -79,15 +81,15 @@ export async function register(userId: ObjectId, response: RegistrationResponseJ
     const { credentialPublicKey, credentialID, counter } = registrationInfo;
 
     const newAuthenticator: Authenticator = {
-        credentialID,
-        credentialPublicKey,
+        credentialID: Buffer.from(credentialID),
+        credentialPublicKey: Buffer.from(credentialPublicKey),
         counter,
     };
 
-    const col = (await mongo).db('lakehub').collection('users')
+    const col = (await mongo).db('lakehub').collection<User>('users')
     let r = await col.updateOne(
         { _id: userId },
-        { $push: { authenticator: newAuthenticator } }
+        { $push: { authenticators: newAuthenticator } }
     )
     return r.modifiedCount == 1
 }
