@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { links } from '~/indexLinks'
 import { sessionOptions } from '~/lib/session';
 import { ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import mongo from '~/lib/mongo';
-import { ObjectId } from 'mongodb';
 import { User } from '~/lib/user';
 
 export default function Index({
@@ -82,13 +80,10 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   req,
   res,
 }) {
-  const client = await mongo
-  const db = client.db('lakehub')
-  const user = await db.collection<User>('users').findOne({ _id: new ObjectId(req.session.userId) }) as User;
   return {
     props: {
-      verified: user?.verified ?? null,
-      org: user?.org ?? null,
+      verified: req.session.verified ?? null,
+      org: req.session.org ?? null,
     }
   }
 },

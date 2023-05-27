@@ -17,7 +17,6 @@ if (!globalWithRandomArray._randomArray) {
 export const sessionOptions: IronSessionOptions = {
   password: Buffer.from(globalWithRandomArray._randomArray).toString('base64'),
   cookieName: "lks",
-  ttl: 60 * 5,
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
   },
@@ -26,7 +25,9 @@ export const sessionOptions: IronSessionOptions = {
 // This is where we specify the typings of req.session.*
 declare module "iron-session" {
   interface IronSessionData {
-    userId: string;
-    challenge?: string;
+    verified: boolean;
+    org: string;
+    casId: string;
+    casPassword: string;
   }
 }

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 
 export default function SignIn() {
   const [webAuthnAvailable, setWebAuthnAvailable] = useState(false)
-  const [pwdFieldHidden, setPwdFieldHidden] = useState(true)
+  const [pwdFieldHidden, setPwdFieldHidden] = useState(false)
   const casId = useRef('')
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function SignIn() {
 
       <div className="flex items-center justify-between space-x-4">
         <div className="flex items-center">
-          <input type="checkbox"
+          <input type="checkbox" id="rememberme" name="rememberme" checked
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
           <label className="ml-2 block text-sm">Trust this device</label>
           <a className="ml-1 text-sm text-indigo-500 hover:text-indigo-600">What?</a>

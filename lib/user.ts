@@ -1,17 +1,4 @@
 import { CredentialDeviceType } from "@simplewebauthn/typescript-types";
-import { Binary } from "mongodb";
-
-export interface Authenticator {
-    // name: String;
-    credentialID: Binary;
-    credentialPublicKey: Binary;
-    counter: number;
-    // credentialDeviceType: CredentialDeviceType;
-    // credentialBackedUp: boolean;
-    // transports?: AuthenticatorTransport[];
-    // createdAt: Date;
-    // updatedAt: Date;
-}
 
 export interface User {
     verified: boolean;
@@ -20,6 +7,4 @@ export interface User {
     org: string;
     casId: string;
     casPassword: string;
-
-    authenticators: Authenticator[];
 };
