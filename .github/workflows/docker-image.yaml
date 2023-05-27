@@ -1,0 +1,36 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["next"]
+  workflow_dispatch:
+    
+
+jobs:
+  build-hub:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Docker Login
+        uses: docker/login-action@v2
+        with:
+          registry: "ghcr.io"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: ghcr.io/lakelink/hub:next
+          platforms: linux/amd64,linux/arm64
+          push: true
+          cache-from: type=registry,ref=ghcr.io/yiffyi/hub:next
+          cache-to: type=inline
