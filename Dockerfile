@@ -7,7 +7,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn --frozen-lockfile && yarn build
+RUN yarn && yarn build
 
 # If using npm comment out above and use below instead
 # RUN npm run build
