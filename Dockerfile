@@ -1,5 +1,5 @@
 # Rebuild the source code only when needed
-FROM node:16-alpine AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 COPY . .
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -13,7 +13,7 @@ RUN yarn && yarn build
 # RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
